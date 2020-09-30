@@ -1,0 +1,79 @@
+apiVersion: kfdef.apps.kubeflow.org/v1
+kind: KfDef
+metadata:
+  annotations:
+    kfctl.kubeflow.io/force-delete: 'false'
+  name: opendatahub
+  namespace: my-opendatahub
+spec:
+  applications:
+    - kustomizeConfig:
+        parameters:
+          - name: image_registry
+            value: --LOCAL_REGISTRY--
+          - name: git_server
+            value: --GIT_REPO--
+        overlays:
+          - disconnected
+        repoRef:
+          name: manifests
+          path: odh-common
+      name: odh-common
+    - kustomizeConfig:
+        parameters:
+          - name: image_registry
+            value: --LOCAL_REGISTRY--
+          - name: git_server
+            value: --GIT_REPO--
+        overlays:
+          - disconnected
+        repoRef:
+          name: manifests
+          path: radanalyticsio/spark/cluster
+      name: radanalyticsio-cluster
+    - kustomizeConfig:
+        parameters:
+          - name: image_registry
+            value: --LOCAL_REGISTRY--
+          - name: git_server
+            value: --GIT_REPO--
+        overlays:
+          - disconnected
+        repoRef:
+          name: manifests
+          path: radanalyticsio/spark/operator
+      name: radanalyticsio-spark-operator
+    - kustomizeConfig:
+        parameters:
+          - name: s3_endpoint_url
+            value: rook-ceph-rgw-s3-object-store.rook-ceph.svc:8080
+          - name: storage_class
+            value: rook-ceph-block
+          - name: image_registry
+            value: --LOCAL_REGISTRY--
+          - name: git_server
+            value: --GIT_REPO--
+        overlays:
+          - disconnected
+        repoRef:
+          name: manifests
+          path: jupyterhub/jupyterhub
+      name: jupyterhub
+    - kustomizeConfig:
+        parameters:
+          - name: image_registry
+            value: --LOCAL_REGISTRY--
+          - name: git_server
+            value: --GIT_REPO--
+        overlays:
+          - additional
+          - disconnected
+        repoRef:
+          name: manifests
+          path: jupyterhub/notebook-images
+      name: notebook-images
+  repos:
+    - name: manifests
+      uri: --MANIFEST_URL--
+  version: v0.8.0
+status: {}

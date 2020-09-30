@@ -1,0 +1,8 @@
+- op: add
+  path: spec/tags/annotations
+  value:
+    openshift.io/imported-from: "$(image_registry)/jupyterhub-img"
+- op: add
+  path: spec/tags/from/name
+  value: $(image_registry)/jupyterhub-img:3.0.7-b7db22b
+  
