@@ -3,26 +3,6 @@
 ```bash
 git clone https://github.com/cgruver/opendatahub-disconnected-install.git
 cd opendatahub-disconnected-install
-mkdir -p ~/odh-workdir
-
-tar -cvf ~/odh-workdir/odh-manifests.tar ./odh-manifests
-gzip ~/odh-workdir/odh-manifests.tar
-
-```
-
-```bash
-mkdir -p ~/odh-workdir
-cp ./openshift-resources/*.yaml ~/odh-workdir
-LOCAL_REGISTRY=nexus.your.domain.com:5000
-sed -i "s|--LOCAL_REGISTRY--|${LOCAL_REGISTRY}|g" ~/odh-workdir/opendatahub-operator.v0.8.0.clusterserviceversion.yaml
-sed -i "s|--LOCAL_REGISTRY--|${LOCAL_REGISTRY}|g" ~/odh-workdir/python.yaml
-sed -i "s|--LOCAL_REGISTRY--|${LOCAL_REGISTRY}|g" ~/odh-workdir/postgresql.yaml
-
-oc apply -f role.yaml
-oc apply -f kfdef.apps.kubeflow.org.crd.yaml
-oc apply -f opendatahub-operator.v0.8.0.clusterserviceversion.yaml
-oc apply -f python.yaml
-oc apply -f postgresql.yaml
 ```
 
 ### Make the Open Data Hub images available to the OpenShift cluster:
@@ -83,3 +63,30 @@ From your internet connected workstation or bastion host:
         docker push ${IMAGE_TAG}
     done
     ```
+
+
+```bash
+mkdir -p ~/odh-workdir
+
+tar -cvf ~/odh-workdir/odh-manifests.tar ./odh-manifests
+gzip ~/odh-workdir/odh-manifests.tar
+
+cp ./openshift-resources/*.yaml ~/odh-workdir
+cp kfdef.yaml ~/odh-workdir
+LOCAL_REGISTRY=nexus.your.domain.com:5000
+MANIFEST_URL=http://your.nginx.com/opendatahub/odh-manifests.tar.gz
+sed -i "s|--LOCAL_REGISTRY--|${LOCAL_REGISTRY}|g" ~/odh-workdir/opendatahub-operator.v0.8.0.clusterserviceversion.yaml
+sed -i "s|--LOCAL_REGISTRY--|${LOCAL_REGISTRY}|g" ~/odh-workdir/python.yaml
+sed -i "s|--LOCAL_REGISTRY--|${LOCAL_REGISTRY}|g" ~/odh-workdir/postgresql.yaml
+sed -i "s|--LOCAL_REGISTRY--|${LOCAL_REGISTRY}|g" ~/odh-workdir/kfdef.yaml
+sed -i "s|--MANIFEST_URL--|${MANIFEST_URL}|g" ~/odh-workdir/kfdef.yaml
+
+cd ~/odh-workdir
+oc apply -f role.yaml
+oc apply -f kfdef.apps.kubeflow.org.crd.yaml
+oc apply -f opendatahub-operator.v0.8.0.clusterserviceversion.yaml
+oc apply -f python.yaml
+oc apply -f postgresql.yaml
+oc apply -f kfdef.yaml
+```
+
