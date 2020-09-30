@@ -10,6 +10,7 @@ metadata:
   labels:
     samples.operator.openshift.io/managed: "false"
   name: postgresql
+  namespace: openshift
   selfLink: /apis/image.openshift.io/v1/namespaces/openshift/imagestreams/postgresql
 spec:
   lookupPolicy:
@@ -25,7 +26,7 @@ spec:
       version: "10"
     from:
       kind: DockerImage
-      name: centos/postgresql-10-centos7:latest
+      name: --LOCAL_REGISTRY--/centos/postgresql-10-centos7:latest
     generation: 1
     importPolicy: {}
     name: "10"
@@ -41,7 +42,7 @@ spec:
       version: "12"
     from:
       kind: DockerImage
-      name: centos/postgresql-12-centos7:latest
+      name: --LOCAL_REGISTRY--/centos/postgresql-12-centos7:latest
     generation: 1
     importPolicy: {}
     name: "12"
@@ -57,7 +58,7 @@ spec:
       version: "9.6"
     from:
       kind: DockerImage
-      name: centos/postgresql-96-centos7:latest
+      name: --LOCAL_REGISTRY--/centos/postgresql-96-centos7:latest
     generation: 1
     importPolicy: {}
     name: "9.6"

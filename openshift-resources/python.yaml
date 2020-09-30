@@ -6,6 +6,7 @@ metadata:
   labels:
     samples.operator.openshift.io/managed: "false"
   name: python
+  namespace: openshift
 spec:
   lookupPolicy:
     local: false
