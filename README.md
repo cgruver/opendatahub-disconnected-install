@@ -5,7 +5,7 @@ git clone https://github.com/cgruver/opendatahub-disconnected-install.git
 cd opendatahub-disconnected-install
 mkdir -p ~/odh-workdir
 
-tar -cvf mkdir -p ~/odh-workdir/odh-manifests.tar ./odh-manifests
+tar -cvf ~/odh-workdir/odh-manifests.tar ./odh-manifests
 gzip ~/odh-workdir/odh-manifests.tar
 
 ```
