@@ -2,19 +2,19 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: jupyterhub
+    app: jupyterhub-db
   name: jupyterhub-db
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: jupyterhub
+      app: jupyterhub-db
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: jupyterhub
+        app: jupyterhub-db
         component.opendatahub.io/name: jupyterhub
         opendatahub.io/component: 'true'
       annotations:
