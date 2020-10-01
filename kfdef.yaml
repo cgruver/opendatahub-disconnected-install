@@ -8,25 +8,11 @@ metadata:
 spec:
   applications:
     - kustomizeConfig:
-        parameters:
-          - name: image_registry
-            value: --LOCAL_REGISTRY--
-          - name: git_server
-            value: --GIT_REPO--
-        overlays:
-          - disconnected
         repoRef:
           name: manifests
           path: odh-common
       name: odh-common
     - kustomizeConfig:
-        parameters:
-          - name: image_registry
-            value: --LOCAL_REGISTRY--
-          - name: git_server
-            value: --GIT_REPO--
-        overlays:
-          - disconnected
         repoRef:
           name: manifests
           path: radanalyticsio/spark/cluster
