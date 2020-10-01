@@ -1,5 +1,13 @@
 # WIP - Not Ready For Use
 
+### Set up local registry trust
+
+```bash
+cp /etc/pki/ca-trust/source/anchors/nexus.crt ca.crt
+oc create configmap nexus-registry-config --from-file=nexus.your.domain.org..5000=ca.crt -n openshift-config
+oc patch image.config.openshift.io cluster --type=merge --patch '{"spec":{"additionalTrustedCA":{"name":"nexus-registry-config"}}}'
+```
+
 ```bash
 git clone https://github.com/cgruver/opendatahub-disconnected-install.git
 cd opendatahub-disconnected-install
@@ -100,3 +108,16 @@ oc apply -f postgresql.yaml
 oc apply -f kfdef.yaml
 ```
 
+```bash
+oc get secrets -n rook-ceph rook-ceph-object-user-s3-object-store-odh-user -o yaml | grep AccessKey | awk '{print $2}' | base64 --decode
+oc get secrets -n rook-ceph rook-ceph-object-user-s3-object-store-odh-user -o yaml | grep SecretKey | awk '{print $2}' | base64 --decode
+oc get secrets -n rook-ceph rook-ceph-object-user-s3-object-store-odh-user -o yaml | grep Endpoint | awk '{print $2}' | base64 --decode
+```
+
+### GitHub repos:
+https://github.com/opendatahub-io/s2i-lab-elyra
+https://github.com/thoth-station/s2i-minimal-notebook
+https://github.com/thoth-station/s2i-scipy-notebook
+https://github.com/harshad16/cuda.git
+https://github.com/harshad16/s2i-python-container.git
+https://github.com/vpavlin/jupyter-notebooks
