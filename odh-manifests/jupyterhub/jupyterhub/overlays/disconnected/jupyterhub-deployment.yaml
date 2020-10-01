@@ -1,0 +1,14 @@
+- op: add
+  path: /spec/template/spec/containers/0/image
+  value: --LOCAL_REGISTRY--/odh-jupyterhub/jupyterhub-img:3.0.7-b7db22b
+- op: add
+  path: /spec/template/spec/init-containers/0/image
+  value: --LOCAL_REGISTRY--/odh-jupyterhub/jupyterhub-img:3.0.7-b7db22b
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value: 
+    name: JUPYTERHUB_STORAGE_CLASS
+    valueFrom:
+      configMapKeyRef:
+        name: jupyterhub-cfg
+        key: storage_class

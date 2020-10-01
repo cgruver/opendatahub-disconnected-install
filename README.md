@@ -67,21 +67,31 @@ From your internet connected workstation or bastion host:
 
 ```bash
 mkdir -p ~/odh-workdir
-
-tar -cvf ~/odh-workdir/odh-manifests.tar ./odh-manifests
-gzip ~/odh-workdir/odh-manifests.tar
-
+cp -r ./odh-manifests ~/odh-workdir
 cp ./openshift-resources/*.yaml ~/odh-workdir
 cp kfdef.yaml ~/odh-workdir
 LOCAL_REGISTRY=nexus.your.domain.com:5000
 MANIFEST_URL=http://your.nginx.com/opendatahub/odh-manifests.tar.gz
-sed -i "s|--LOCAL_REGISTRY--|${LOCAL_REGISTRY}|g" ~/odh-workdir/opendatahub-operator.v0.8.0.clusterserviceversion.yaml
-sed -i "s|--LOCAL_REGISTRY--|${LOCAL_REGISTRY}|g" ~/odh-workdir/python.yaml
-sed -i "s|--LOCAL_REGISTRY--|${LOCAL_REGISTRY}|g" ~/odh-workdir/postgresql.yaml
-sed -i "s|--LOCAL_REGISTRY--|${LOCAL_REGISTRY}|g" ~/odh-workdir/kfdef.yaml
-sed -i "s|--MANIFEST_URL--|${MANIFEST_URL}|g" ~/odh-workdir/kfdef.yaml
 
 cd ~/odh-workdir
+for i in $(find . -name disconnected)
+do
+    for j in $(ls ${i})
+    do
+        sed -i "s|--LOCAL_REGISTRY--|${LOCAL_REGISTRY}|g" ${i}/${j}
+    done
+done
+
+tar -cvf ./odh-manifests.tar ./odh-manifests
+gzip ./odh-manifests.tar
+scp ./odh-manifests.tar.gz root@your.nginx.com:/usr/local/nginx/html/opendatahub/odh-manifests.tar.gz
+
+sed -i "s|--LOCAL_REGISTRY--|${LOCAL_REGISTRY}|g" opendatahub-operator.v0.8.0.clusterserviceversion.yaml
+sed -i "s|--LOCAL_REGISTRY--|${LOCAL_REGISTRY}|g" python.yaml
+sed -i "s|--LOCAL_REGISTRY--|${LOCAL_REGISTRY}|g" postgresql.yaml
+sed -i "s|--LOCAL_REGISTRY--|${LOCAL_REGISTRY}|g" kfdef.yaml
+sed -i "s|--MANIFEST_URL--|${MANIFEST_URL}|g" kfdef.yaml
+
 oc apply -f role.yaml
 oc apply -f kfdef.apps.kubeflow.org.crd.yaml
 oc apply -f opendatahub-operator.v0.8.0.clusterserviceversion.yaml

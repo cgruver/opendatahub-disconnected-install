@@ -1,9 +1,9 @@
 - op: add
-  path: spec/tags/annotations
+  path: spec/tags/0/annotations
   value:
-    openshift.io/imported-from: "$(image_registry)/odh-jupyterhub/nbviewer"
+    openshift.io/imported-from: "--LOCAL_REGISTRY--/odh-jupyterhub/nbviewer"
 - op: add
-  path: spec/tags/from
+  path: spec/tags/0/from
   value: 
-    name: $(image_registry)/odh-jupyterhub/nbviewer:latest
+    name: --LOCAL_REGISTRY--/odh-jupyterhub/nbviewer:latest
   

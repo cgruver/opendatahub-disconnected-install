@@ -18,11 +18,7 @@ spec:
           path: radanalyticsio/spark/cluster
       name: radanalyticsio-cluster
     - kustomizeConfig:
-        parameters:
-          - name: image_registry
-            value: --LOCAL_REGISTRY--
-          - name: git_server
-            value: --GIT_REPO--
+        parameters: {}
         overlays:
           - disconnected
         repoRef:
@@ -35,10 +31,6 @@ spec:
             value: rook-ceph-rgw-s3-object-store.rook-ceph.svc:8080
           - name: storage_class
             value: rook-ceph-block
-          - name: image_registry
-            value: --LOCAL_REGISTRY--
-          - name: git_server
-            value: --GIT_REPO--
         overlays:
           - disconnected
         repoRef:
@@ -46,13 +38,8 @@ spec:
           path: jupyterhub/jupyterhub
       name: jupyterhub
     - kustomizeConfig:
-        parameters:
-          - name: image_registry
-            value: --LOCAL_REGISTRY--
-          - name: git_server
-            value: --GIT_REPO--
+        parameters: {}
         overlays:
-          - additional
           - disconnected
         repoRef:
           name: manifests
