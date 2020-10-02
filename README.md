@@ -97,7 +97,6 @@ scp ./odh-manifests.tar.gz root@your.nginx.com:/usr/local/nginx/html/opendatahub
 sed -i "s|--LOCAL_REGISTRY--|${LOCAL_REGISTRY}|g" opendatahub-operator.v0.8.0.clusterserviceversion.yaml
 sed -i "s|--LOCAL_REGISTRY--|${LOCAL_REGISTRY}|g" python.yaml
 sed -i "s|--LOCAL_REGISTRY--|${LOCAL_REGISTRY}|g" postgresql.yaml
-sed -i "s|--LOCAL_REGISTRY--|${LOCAL_REGISTRY}|g" kfdef.yaml
 sed -i "s|--MANIFEST_URL--|${MANIFEST_URL}|g" kfdef.yaml
 
 oc apply -f role.yaml
@@ -105,19 +104,20 @@ oc apply -f kfdef.apps.kubeflow.org.crd.yaml
 oc apply -f opendatahub-operator.v0.8.0.clusterserviceversion.yaml
 oc apply -f python.yaml
 oc apply -f postgresql.yaml
+oc apply -f object-user.yaml
+
+oc new-project my-opendatahub
 oc apply -f kfdef.yaml
 ```
 
+Log into JupyterHub
+
 ```bash
-oc get secrets -n rook-ceph rook-ceph-object-user-s3-object-store-odh-user -o yaml | grep AccessKey | awk '{print $2}' | base64 --decode
-oc get secrets -n rook-ceph rook-ceph-object-user-s3-object-store-odh-user -o yaml | grep SecretKey | awk '{print $2}' | base64 --decode
-oc get secrets -n rook-ceph rook-ceph-object-user-s3-object-store-odh-user -o yaml | grep Endpoint | awk '{print $2}' | base64 --decode
+oc get route jupyterhub -n my-opendatahub -o jsonpath='{.spec.host}'
 ```
 
-### GitHub repos:
-https://github.com/opendatahub-io/s2i-lab-elyra
-https://github.com/thoth-station/s2i-minimal-notebook
-https://github.com/thoth-station/s2i-scipy-notebook
-https://github.com/harshad16/cuda.git
-https://github.com/harshad16/s2i-python-container.git
-https://github.com/vpavlin/jupyter-notebooks
+```bash
+AWS_ACCESS_KEY_ID=$(oc get secrets -n rook-ceph rook-ceph-object-user-s3-object-store-odh-user -o yaml | grep AccessKey | grep -v "f:AccessKey:" | awk '{print $2}' | base64 --decode)
+AWS_SECRET_ACCESS_KEY=$(oc get secrets -n rook-ceph rook-ceph-object-user-s3-object-store-odh-user -o yaml | grep SecretKey | grep -v "f:SecretKey:" | awk '{print $2}' | base64 --decode)
+oc get secrets -n rook-ceph rook-ceph-object-user-s3-object-store-odh-user -o yaml | grep Endpoint | awk '{print $2}' | base64 --decode
+```
