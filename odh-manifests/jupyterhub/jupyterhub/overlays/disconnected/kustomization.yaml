@@ -6,17 +6,11 @@ bases:
 #resources:
 patchesJson6902:
 - target:
-    group: apps
-    kind: Deployment
-    version: v1
-    name: jupyterhub-db
-  path: jupyterhub-db-deployment.yaml
-- target:
-    group: apps
-    kind: Deployment
+    group: apps.openshift.io
+    kind: DeploymentConfig
     version: v1
     name: jupyterhub
-  path: jupyterhub-deployment.yaml
+  path: jupyterhub-dc.yaml
 - target:
     kind: PersistentVolumeClaim
     version: v1
