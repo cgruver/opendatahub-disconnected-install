@@ -6,18 +6,6 @@ bases:
 #resources:
 patchesJson6902:
 - target:
-    group: apps
-    kind: Deployment
-    version: v1
-    name: jupyterhub-db
-  path: jupyterhub-db-deployment.yaml
-- target:
-    group: apps
-    kind: Deployment
-    version: v1
-    name: jupyterhub
-  path: jupyterhub-deployment.yaml
-- target:
     kind: PersistentVolumeClaim
     version: v1
     name: jupyterhub-db
@@ -27,3 +15,9 @@ patchesJson6902:
     version: v1
     name: jupyterhub-cfg
   path: jupyterhub-configmap.yaml
+- target:
+    group: image.openshift.io
+    kind: ImageStream
+    version: v1
+    name: jupyterhub-img
+  path: jupyterhub-img-imagestream.yaml
