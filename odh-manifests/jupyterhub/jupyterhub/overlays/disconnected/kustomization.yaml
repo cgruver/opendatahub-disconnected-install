@@ -26,3 +26,9 @@ patchesJson6902:
     version: v1
     name: jupyter-singleuser-profiles
   path: jupyterhub-singleuser-profiles-configmap.yaml
+- target:
+    group: image.openshift.io
+    kind: ImageStream
+    version: v1
+    name: jupyterhub-img
+  path: jupyterhub-img-imagestream.yaml
