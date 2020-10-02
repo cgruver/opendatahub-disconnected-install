@@ -1,25 +1,25 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
 metadata:
   labels:
-    app: jupyterhub-db
+    app: jupyterhub
   name: jupyterhub-db
 spec:
   replicas: 1
   selector:
-    matchLabels:
-      app: jupyterhub-db
+    app: jupyterhub
+    deploymentconfig: jupyterhub-db
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: jupyterhub-db
+        app: jupyterhub
+        deploymentconfig: jupyterhub-db
         component.opendatahub.io/name: jupyterhub
         opendatahub.io/component: 'true'
       annotations:
         sidecar.istio.io/inject: "true"
-      name: jupyterhub-db
     spec:
       containers:
       - env:
@@ -53,12 +53,9 @@ spec:
         resources:
           limits:
             memory: 1Gi
-            cpu: 1
         volumeMounts:
         - mountPath: /var/lib/pgsql/data
           name: data
-        image: centos/postgresql-96-centos7:latest
-        imagePullPolicy: Always
       volumes:
       - name: data
         persistentVolumeClaim:
@@ -67,3 +64,14 @@ spec:
           defaultMode: 420
           name: jupyterhub-cfg
         name: config
+  triggers:
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - postgresql
+      from:
+        kind: ImageStreamTag
+        name: postgresql:9.6
+        namespace: openshift
+    type: ImageChange
+  - type: ConfigChange

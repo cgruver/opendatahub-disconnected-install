@@ -1,5 +1,5 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
 metadata:
   labels:
     app: jupyterhub
@@ -7,8 +7,8 @@ metadata:
 spec:
   replicas: 1
   selector:
-    matchLabels:
-      app: jupyterhub
+    app: jupyterhub
+    deploymentconfig: jupyterhub
   strategy:
     recreateParams:
       timeoutSeconds: 1200
@@ -20,6 +20,7 @@ spec:
         sidecar.istio.io/inject: "true"
       labels:
         app: jupyterhub
+        deploymentconfig: jupyterhub
         component: web
         component.opendatahub.io/name: jupyterhub
         opendatahub.io/component: 'true'
@@ -57,8 +58,7 @@ spec:
             configMapKeyRef:
               name: jupyterhub-cfg
               key: singleuser_pvc_size
-        image: quay.io/odh-jupyterhub/jupyterhub-img:3.0.7-b7db22b
-        imagePullPolicy: Always
+        image: jupyterhub-img:latest
         name: jupyterhub
         ports:
         - containerPort: 8080
@@ -66,7 +66,6 @@ spec:
         resources:
           limits:
             memory: 1Gi
-            cpu: 1
         volumeMounts:
         - mountPath: /opt/app-root/configs
           name: config
@@ -81,8 +80,7 @@ spec:
               key: POSTGRESQL_PASSWORD
         - name: JUPYTERHUB_DATABASE_HOST
           value: jupyterhub-db
-        image: quay.io/odh-jupyterhub/jupyterhub-img:3.0.7-b7db22b
-        imagePullPolicy: Always
+        image: jupyterhub-img:latest
         name: wait-for-database
         resources:
           limits:
