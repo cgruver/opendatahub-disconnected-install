@@ -1,12 +1,33 @@
-# WIP - Not Ready For Use
+# WIP - Tested on OKD 4.5 Disconnected
+
+### Prerequisites:
+
+1. You need cluster-admin access to a running OpenShift 4 cluster (This guide was tested on OKD 4.5)
+1. An image registry that is accessible from the OpenShift cluster. You can use the OpenShift internal registry.
+1. An HTTP server to host the manifest bundle at `http://your.http.srv/opendatahub/odh-manifests.tar.gz`
+1. A workstation with internet access and either podman or docker
+1. Dynamic storage provisioners for Block and S3 compatible Object storage
+    See: https://github.com/cgruver/rook-ceph-disconnected-install for a disconnected install of Ceph that provides the needed storage capabilities
 
 ### Set up local registry trust
+
+You need to establish trust between your OpenShift cluster and your image registry so that the ImageStreams will work.
+
+If you need to install a registry to hold your mirrored images, you can follow this guide: https://github.com/cgruver/okd4-upi-lab-setup/blob/master/docs/pages/Nexus_Config.md
+
+Modify the following assumptions for your environment:
+1. The self-signed cert for your registry is at `/etc/pki/ca-trust/source/anchors/nexus.crt`
+1. The URL for your registry is: nexus.your.domain.org:5000 __Note: replace the `:` with `..` below__
 
 ```bash
 cp /etc/pki/ca-trust/source/anchors/nexus.crt ca.crt
 oc create configmap nexus-registry-config --from-file=nexus.your.domain.org..5000=ca.crt -n openshift-config
 oc patch image.config.openshift.io cluster --type=merge --patch '{"spec":{"additionalTrustedCA":{"name":"nexus-registry-config"}}}'
 ```
+
+### Set up Open Data Hub
+
+Clone this repository:
 
 ```bash
 git clone https://github.com/cgruver/opendatahub-disconnected-install.git
@@ -47,7 +68,10 @@ From your internet connected workstation or bastion host:
 
 1. Pull the images needed for the install:
 
+    Replace the value for LOCAL_REGISTRY with the URL for your registry.
+
     ```bash
+    LOCAL_REGISTRY=nexus.your.domain.org:5000
     for i in $(cat odh-images)
     do 
         IMAGE_TAG=${LOCAL_REGISTRY}/$(echo $i | cut -d"/" -f2-)
@@ -72,40 +96,55 @@ From your internet connected workstation or bastion host:
     done
     ```
 
+### Install Open Data Hub:
+
+1. Create a working directory and stage the files:
+
+    ```bash
+    mkdir -p ~/odh-workdir
+    cp -r ./odh-manifests ~/odh-workdir
+    cp ./openshift-resources/*.yaml ~/odh-workdir
+    cp kfdef.yaml ~/odh-workdir
+
+    MANIFEST_URL=http://your.nginx.com/opendatahub/odh-manifests.tar.gz
+
+    cd ~/odh-workdir
+    sed -i "s|--LOCAL_REGISTRY--|${LOCAL_REGISTRY}|g" opendatahub-operator.v0.8.0.clusterserviceversion.yaml
+    sed -i "s|--LOCAL_REGISTRY--|${LOCAL_REGISTRY}|g" python.yaml
+    sed -i "s|--LOCAL_REGISTRY--|${LOCAL_REGISTRY}|g" postgresql.yaml
+    sed -i "s|--MANIFEST_URL--|${MANIFEST_URL}|g" kfdef.yaml
+
+    for i in $(find . -name disconnected)
+    do
+        for j in $(ls ${i})
+        do
+            sed -i "s|--LOCAL_REGISTRY--|${LOCAL_REGISTRY}|g" ${i}/${j}
+        done
+    done
+
+    tar -cvf ./odh-manifests.tar ./odh-manifests
+    gzip ./odh-manifests.tar
+
+1. Now copy the `odh-manifests.tar.gz` bundle to your http server:
+
+    ```bash
+    scp ./odh-manifests.tar.gz root@your.nginx.com:/usr/local/nginx/html/opendatahub/odh-manifests.tar.gz
+    ```
+
+1. Finally, deploy the Open Data Hub components:
+
+    oc apply -f role.yaml
+    oc apply -f kfdef.apps.kubeflow.org.crd.yaml
+    oc apply -f opendatahub-operator.v0.8.0.clusterserviceversion.yaml
+    oc apply -f python.yaml
+    oc apply -f postgresql.yaml
+    oc apply -f object-user.yaml
+
+### Create an instance of Open Data Hub:
+
+This project includes a sample KfDef file that will deploy and instance of Open Data Hub in the `my-opendatahub` namespace.
 
 ```bash
-mkdir -p ~/odh-workdir
-cp -r ./odh-manifests ~/odh-workdir
-cp ./openshift-resources/*.yaml ~/odh-workdir
-cp kfdef.yaml ~/odh-workdir
-LOCAL_REGISTRY=nexus.your.domain.com:5000
-MANIFEST_URL=http://your.nginx.com/opendatahub/odh-manifests.tar.gz
-
-cd ~/odh-workdir
-for i in $(find . -name disconnected)
-do
-    for j in $(ls ${i})
-    do
-        sed -i "s|--LOCAL_REGISTRY--|${LOCAL_REGISTRY}|g" ${i}/${j}
-    done
-done
-
-tar -cvf ./odh-manifests.tar ./odh-manifests
-gzip ./odh-manifests.tar
-scp ./odh-manifests.tar.gz root@your.nginx.com:/usr/local/nginx/html/opendatahub/odh-manifests.tar.gz
-
-sed -i "s|--LOCAL_REGISTRY--|${LOCAL_REGISTRY}|g" opendatahub-operator.v0.8.0.clusterserviceversion.yaml
-sed -i "s|--LOCAL_REGISTRY--|${LOCAL_REGISTRY}|g" python.yaml
-sed -i "s|--LOCAL_REGISTRY--|${LOCAL_REGISTRY}|g" postgresql.yaml
-sed -i "s|--MANIFEST_URL--|${MANIFEST_URL}|g" kfdef.yaml
-
-oc apply -f role.yaml
-oc apply -f kfdef.apps.kubeflow.org.crd.yaml
-oc apply -f opendatahub-operator.v0.8.0.clusterserviceversion.yaml
-oc apply -f python.yaml
-oc apply -f postgresql.yaml
-oc apply -f object-user.yaml
-
 oc new-project my-opendatahub
 oc apply -f kfdef.yaml
 ```
