@@ -27,3 +27,8 @@ patchesJson6902:
     version: v1
     name: jupyterhub-cfg
   path: jupyterhub-configmap.yaml
+- target:
+    kind: ConfigMap
+    version: v1
+    name: jupyter-singleuser-profiles
+  path: jupyterhub-singleuser-profiles-configmap.yaml
