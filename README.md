@@ -62,6 +62,9 @@ docker.io/centos/postgresql-12-centos7:latest
 docker.io/centos/python-27-centos7:latest
 docker.io/centos/python-36-centos7:latest
 registry.access.redhat.com/ubi7/s2i-base:latest
+docker.io/jimmidyson/configmap-reload:v0.3.0
+quay.io/coreos/prometheus-config-reloader:v0.38.1
+quay.io/coreos/prometheus-operator:v0.38.1
 ```
 
 From your internet connected workstation or bastion host:
@@ -109,9 +112,11 @@ From your internet connected workstation or bastion host:
     MANIFEST_URL=http://your.nginx.com/opendatahub/odh-manifests.tar.gz
 
     cd ~/odh-workdir
-    sed -i "s|--LOCAL_REGISTRY--|${LOCAL_REGISTRY}|g" opendatahub-operator.v0.8.0.clusterserviceversion.yaml
-    sed -i "s|--LOCAL_REGISTRY--|${LOCAL_REGISTRY}|g" python.yaml
-    sed -i "s|--LOCAL_REGISTRY--|${LOCAL_REGISTRY}|g" postgresql.yaml
+    for i in $(ls *.yaml)
+    do
+        sed -i "s|--LOCAL_REGISTRY--|${LOCAL_REGISTRY}|g" ${i}
+    done
+
     sed -i "s|--MANIFEST_URL--|${MANIFEST_URL}|g" kfdef.yaml
 
     for i in $(find . -name disconnected)
@@ -124,6 +129,7 @@ From your internet connected workstation or bastion host:
 
     tar -cvf ./odh-manifests.tar ./odh-manifests
     gzip ./odh-manifests.tar
+    ```
 
 1. Now copy the `odh-manifests.tar.gz` bundle to your http server:
 

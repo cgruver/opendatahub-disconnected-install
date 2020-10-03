@@ -17,3 +17,11 @@ docker.io/centos/postgresql-12-centos7:latest
 docker.io/centos/python-27-centos7:latest
 docker.io/centos/python-36-centos7:latest
 registry.access.redhat.com/ubi7/s2i-base:latest
+docker.io/jimmidyson/configmap-reload:v0.3.0
+quay.io/coreos/prometheus-config-reloader:v0.38.1
+quay.io/coreos/prometheus-operator:v0.38.1
+quay.io/openshift/origin-grafana:4.5
+quay.io/integreatly/grafana-operator:v2.0.0
+docker.io/jcrossley3/knative-operator
+
+quay.io/opendatahub/ai-library-operator:latest

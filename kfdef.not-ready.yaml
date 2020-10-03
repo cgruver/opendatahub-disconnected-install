@@ -56,6 +56,21 @@ spec:
           name: manifests
           path: grafana/grafana
       name: grafana-operator
+    - kustomizeConfig:
+        repoRef:
+          name: manifests
+          path: odhseldon/cluster
+      name: odhseldon
+    - kustomizeConfig:
+        repoRef:
+          name: manifests
+          path: ai-library/cluster
+      name: ai-library-cluster
+    - kustomizeConfig:
+        repoRef:
+          name: manifests
+          path: ai-library/operator
+      name: ai-library-operator
   repos:
     - name: manifests
       uri: --MANIFEST_URL--
