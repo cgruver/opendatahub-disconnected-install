@@ -106,7 +106,8 @@ From your internet connected workstation or bastion host:
     ```bash
     mkdir -p ~/odh-workdir
     cp -r ./odh-manifests ~/odh-workdir
-    cp ./openshift-resources/*.yaml ~/odh-workdir
+    cp ./openshift-resources/ApplyOnce/*.yaml ~/odh-workdir
+    cp ./openshift-resources/PerNamespace/*.yaml ~/odh-workdir
     cp kfdef.yaml ~/odh-workdir
 
     MANIFEST_URL=http://your.nginx.com/opendatahub/odh-manifests.tar.gz
