@@ -24,4 +24,3 @@ quay.io/openshift/origin-grafana:4.5
 quay.io/integreatly/grafana-operator:v3.5.0
 docker.io/jcrossley3/knative-operator
 
-quay.io/opendatahub/ai-library-operator:latest
