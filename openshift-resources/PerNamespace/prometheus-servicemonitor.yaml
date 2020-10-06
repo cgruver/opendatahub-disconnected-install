@@ -1,10 +1,20 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
+  name: odhservicemonitor
+  labels:
+    team: opendatahub
+spec:
+  selector: {}
+  endpoints:
+    - port: web
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
   labels:
     team: opendatahub
   name: kafkaservicemonitor
-  namespace: opendatahub
 spec:
   endpoints:
     - port: prometheus

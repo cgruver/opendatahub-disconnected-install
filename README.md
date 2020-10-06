@@ -137,14 +137,24 @@ From your internet connected workstation or bastion host:
     scp ./odh-manifests.tar.gz root@your.nginx.com:/usr/local/nginx/html/opendatahub/odh-manifests.tar.gz
     ```
 
+1. If you want Grafana installed, then deploy the grafana operator:
+
+    ```bash
+    oc apply -f grafana-role.yaml
+    oc apply -f grafana-crd.yaml
+    oc apply -f grafana-operator-csv.yaml
+    ```
+
 1. Finally, deploy the Open Data Hub components:
 
+    ```bash
     oc apply -f role.yaml
     oc apply -f kfdef.apps.kubeflow.org.crd.yaml
     oc apply -f opendatahub-operator.v0.8.0.clusterserviceversion.yaml
     oc apply -f python.yaml
     oc apply -f postgresql.yaml
     oc apply -f object-user.yaml
+    ```
 
 ### Create an instance of Open Data Hub:
 

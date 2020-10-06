@@ -44,14 +44,6 @@ spec:
           path: jupyterhub/notebook-images
       name: notebook-images
     - kustomizeConfig:
-        parameters:
-        - name: namespace
-          value: my-opendatahub
-        repoRef:
-          name: manifests
-          path: prometheus/operator
-      name: prometheus-operator
-    - kustomizeConfig:
         repoRef:
           name: manifests
           path: grafana/grafana
