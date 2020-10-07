@@ -257,4 +257,4 @@ oc get secrets -n rook-ceph rook-ceph-object-user-s3-object-store-odh-user -o ya
     quay.io/openshift-pipeline/tektoncd-pipeline-webhook:v0.16.3
     quay.io/openshift-pipeline/tektoncd-triggers-webhook:v0.8.1
     quay.io/openshift-pipeline/tektoncd-triggers-eventlistenersink:v0.8.1
-    google/cloud-sdk@sha256:27b2c22bf259d9bc1a291e99c63791ba0c27a04d2db0a43241ba0f1f20f4067f
+
