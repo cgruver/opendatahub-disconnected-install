@@ -256,6 +256,17 @@ oc get secrets -n rook-ceph rook-ceph-object-user-s3-object-store-odh-user -o ya
 
 ## OpenShift Pipelines:
 
-    quay.io/openshift-pipeline/openshift-pipelines-operator-controller:v0.15.2-1
-    quay.io/openshift-pipeline/tektoncd-pipeline-controller:v0.15.2
-    quay.io/openshift-pipeline/tektoncd-pipeline-webhook:v0.15.2
+    quay.io/openshift-pipeline/tektoncd-pipeline-controller:v0.16.3
+    quay.io/openshift-pipeline/tektoncd-pipeline-kubeconfigwriter:v0.16.3
+    quay.io/openshift-pipeline/tektoncd-pipeline-creds-init:v0.16.3
+    quay.io/openshift-pipeline/tektoncd-pipeline-git-init:v0.16.3
+    quay.io/openshift-pipeline/tektoncd-pipeline-entrypoint:v0.16.3
+    quay.io/openshift-pipeline/tektoncd-pipeline-nop:v0.16.3
+    quay.io/openshift-pipeline/tektoncd-pipeline-imagedigestexporter:v0.16.3
+    quay.io/openshift-pipeline/tektoncd-pipeline-pullrequest-init:v0.16.3
+    quay.io/openshift-pipeline/tektoncd-pipeline-gcs-fetcher:v0.16.3
+    registry.access.redhat.com/ubi8/ubi-minimal:latest
+    quay.io/openshift-pipeline/tektoncd-pipeline-webhook:v0.16.3
+    quay.io/openshift-pipeline/tektoncd-triggers-webhook:v0.8.1
+    quay.io/openshift-pipeline/tektoncd-triggers-eventlistenersink:v0.8.1
+    google/cloud-sdk@sha256:27b2c22bf259d9bc1a291e99c63791ba0c27a04d2db0a43241ba0f1f20f4067f
