@@ -20,7 +20,7 @@ Modify the following assumptions for your environment:
 1. The URL for your registry is: nexus.your.domain.org:5000 __Note: replace the `:` with `..` below__
 
 ```bash
-cp /etc/pki/ca-trust/source/anchors/nexus.crt ca.crt
+openssl s_client -showcerts -connect nexus.clg.lab:5001 </dev/null 2>/dev/null|openssl x509 -outform PEM > ca.crt
 oc create configmap nexus-registry-config --from-file=nexus.your.domain.org..5000=ca.crt -n openshift-config
 oc patch image.config.openshift.io cluster --type=merge --patch '{"spec":{"additionalTrustedCA":{"name":"nexus-registry-config"}}}'
 ```
