@@ -141,7 +141,6 @@ From your internet connected workstation or bastion host:
 1. If you want Grafana installed, then deploy the grafana operator:
 
     ```bash
-    oc apply -f grafana-role.yaml
     oc apply -f grafana-crd.yaml
     oc apply -f grafana-operator-csv.yaml
     ```
@@ -149,9 +148,9 @@ From your internet connected workstation or bastion host:
 1. Finally, deploy the Open Data Hub components:
 
     ```bash
-    oc apply -f role.yaml
-    oc apply -f kfdef.apps.kubeflow.org.crd.yaml
-    oc apply -f opendatahub-operator.v0.8.0.clusterserviceversion.yaml
+    oc apply -f odh-role.yaml
+    oc apply -f kfdef-crd.yaml
+    oc apply -f opendatahub-operator-csv.yaml
     oc apply -f python.yaml
     oc apply -f postgresql.yaml
     oc apply -f object-user.yaml
@@ -204,8 +203,10 @@ oc get secrets -n rook-ceph rook-ceph-object-user-s3-object-store-odh-user -o ya
 
 ## Grafana:
 
+    docker.io/grafana/grafana:6.5.1
     quay.io/openshift/origin-grafana:4.5
     quay.io/integreatly/grafana-operator:v3.5.0
+    quay.io/integreatly/grafana_plugins_init:0.0.2
 
 ## Knative:
 
@@ -256,3 +257,5 @@ oc get secrets -n rook-ceph rook-ceph-object-user-s3-object-store-odh-user -o ya
 ## OpenShift Pipelines:
 
     quay.io/openshift-pipeline/openshift-pipelines-operator-controller:v0.15.2-1
+    quay.io/openshift-pipeline/tektoncd-pipeline-controller:v0.15.2
+    quay.io/openshift-pipeline/tektoncd-pipeline-webhook:v0.15.2
