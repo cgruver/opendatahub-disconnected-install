@@ -40,32 +40,7 @@ The next step is to pull all of the images needed for the install, and make them
 
 These instructions assume that you are using a personal workstation with Docker desktop.  You can also use `podman`, `skopeo`, or `buildah` to perform these steps.
 
-The list of images is in the file `odh-images`, included with this guide:
-
-```bash
-quay.io/opendatahub/opendatahub-operator:v0.8.0
-quay.io/odh-jupyterhub/jupyterhub-img:3.0.7-b7db22b
-quay.io/radanalyticsio/openshift-spark-py36:2.4.5-2
-quay.io/radanalyticsio/spark-operator:1.0.7
-quay.io/odh-jupyterhub/s2i-spark-scipy-notebook:3.6
-quay.io/odh-jupyterhub/s2i-spark-minimal-notebook:py36-spark2.4.5-hadoop2.7.3
-quay.io/odh-jupyterhub/nbviewer:latest
-quay.io/odh-jupyterhub/s2i-spark-container:spark2.4.5-1
-quay.io/thoth-station/s2i-lab-elyra:v0.0.2
-quay.io/thoth-station/s2i-minimal-notebook:v0.0.4
-quay.io/thoth-station/s2i-scipy-notebook:v0.0.1
-quay.io/thoth-station/s2i-tensorflow-notebook:v0.0.1
-quay.io/thoth-station/s2i-thoth-ubi8-py36:v0.15.0
-docker.io/centos/postgresql-96-centos7:latest
-docker.io/centos/postgresql-10-centos7:latest
-docker.io/centos/postgresql-12-centos7:latest
-docker.io/centos/python-27-centos7:latest
-docker.io/centos/python-36-centos7:latest
-registry.access.redhat.com/ubi7/s2i-base:latest
-docker.io/jimmidyson/configmap-reload:v0.3.0
-quay.io/coreos/prometheus-config-reloader:v0.38.1
-quay.io/coreos/prometheus-operator:v0.38.1
-```
+The list of images is in the file `odh-images`, included with this guide.
 
 From your internet connected workstation or bastion host:
 
@@ -76,6 +51,13 @@ From your internet connected workstation or bastion host:
     ```bash
     LOCAL_REGISTRY=nexus.your.domain.org:5000
     for i in $(cat odh-images)
+    do 
+        IMAGE_TAG=${LOCAL_REGISTRY}/$(echo $i | cut -d"/" -f2-)
+        docker pull ${i}
+        docker tag ${i} ${IMAGE_TAG}
+    done
+
+    for i in $(cat knative-images)
     do 
         IMAGE_TAG=${LOCAL_REGISTRY}/$(echo $i | cut -d"/" -f2-)
         docker pull ${i}
@@ -93,6 +75,12 @@ From your internet connected workstation or bastion host:
 
     ```bash
     for i in $(cat odh-images)
+    do 
+        IMAGE_TAG=${LOCAL_REGISTRY}/$(echo $i | cut -d"/" -f2-)
+        docker push ${IMAGE_TAG}
+    done
+
+    for i in $(cat knative-images)
     do 
         IMAGE_TAG=${LOCAL_REGISTRY}/$(echo $i | cut -d"/" -f2-)
         docker push ${IMAGE_TAG}
