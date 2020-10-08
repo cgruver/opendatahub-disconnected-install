@@ -1,0 +1,33 @@
+apiVersion: operator.openshift.io/v1alpha1
+kind: ImageContentSourcePolicy
+metadata:
+  name: diconnected-odh
+spec:
+  repositoryDigestMirrors:
+  - mirrors:
+    - --LOCAL_REGISTRY--/grafana
+    source: docker.io/grafana
+  - mirrors:
+    - --LOCAL_REGISTRY--/openshift
+    source: quay.io/openshift
+  - mirrors:
+    - --LOCAL_REGISTRY--/integreatly
+    source: quay.io/integreatly
+  - mirrors:
+    - --LOCAL_REGISTRY--/openshift-pipeline
+    source: quay.io/openshift-pipeline
+  - mirrors:
+    - --LOCAL_REGISTRY--/ubi8
+    source: registry.access.redhat.com/ubi8
+  - mirrors:
+    - --LOCAL_REGISTRY--/ocp-tools-43-tech-preview
+    source: registry.redhat.io/ocp-tools-43-tech-preview
+  - mirrors:
+    - --LOCAL_REGISTRY--/openshift-serverless-1
+    source: registry.redhat.io/openshift-serverless-1
+  - mirrors:
+    - --LOCAL_REGISTRY--/rhel8
+    source: registry.redhat.io/rhel8
+  - mirrors:
+    - --LOCAL_REGISTRY--/tekton-releases/github.com/tektoncd/pipeline/cmd
+    source: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd

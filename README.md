@@ -125,8 +125,13 @@ From your internet connected workstation or bastion host:
     ```bash
     scp ./odh-manifests.tar.gz root@your.nginx.com:/usr/local/nginx/html/opendatahub/odh-manifests.tar.gz
     ```
+1. Create a namespace for your Open Data Hub instance:
 
-1. If you want Grafana installed, then deploy the grafana operator:
+    ```bash
+    oc new-project my-opendatahub
+    ```
+
+1. __Not Working Yet__ If you want Grafana installed, then deploy the grafana operator: __Not Working Yet__
 
     ```bash
     oc apply -f grafana-crd.yaml
@@ -142,6 +147,8 @@ From your internet connected workstation or bastion host:
     oc apply -f python.yaml
     oc apply -f postgresql.yaml
     oc apply -f object-user.yaml
+    oc apply -f prometheus.yaml
+    oc apply -f prometheus-servicemonitor.yaml -n my-opendatahub
     ```
 
 ### Create an instance of Open Data Hub:
@@ -149,8 +156,7 @@ From your internet connected workstation or bastion host:
 This project includes a sample KfDef file that will deploy and instance of Open Data Hub in the `my-opendatahub` namespace.
 
 ```bash
-oc new-project my-opendatahub
-oc apply -f kfdef.yaml
+oc apply -f kfdef.yaml -n my-opendatahub
 ```
 
 Log into JupyterHub
@@ -257,4 +263,8 @@ oc get secrets -n rook-ceph rook-ceph-object-user-s3-object-store-odh-user -o ya
     quay.io/openshift-pipeline/tektoncd-pipeline-webhook:v0.16.3
     quay.io/openshift-pipeline/tektoncd-triggers-webhook:v0.8.1
     quay.io/openshift-pipeline/tektoncd-triggers-eventlistenersink:v0.8.1
-
+    registry.redhat.io/ocp-tools-43-tech-preview/source-to-image-rhel8
+    registry.redhat.io/openshift-serverless-1/client-kn-rhel8:0.15.2
+    registry.redhat.io/rhel8/buildah
+    registry.redhat.io/rhel8/skopeo:8.2
+    gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.14.2
