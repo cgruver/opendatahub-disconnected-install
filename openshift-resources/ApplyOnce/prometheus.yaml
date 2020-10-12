@@ -11,7 +11,7 @@ data:
       retention: 72h
       volumeClaimTemplate:
         metadata:
-          name: prometheusK8s
+          name: prometheusk8s
         spec:
           storageClassName: rook-ceph-block
           resources:

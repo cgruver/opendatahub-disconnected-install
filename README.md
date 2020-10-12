@@ -165,6 +165,10 @@ Log into JupyterHub
 oc get route jupyterhub -n my-opendatahub -o jsonpath='{.spec.host}'
 ```
 
+### Installing Serverless (Knative)
+
+
+
 ```bash
 AWS_ACCESS_KEY_ID=$(oc get secrets -n rook-ceph rook-ceph-object-user-s3-object-store-odh-user -o yaml | grep AccessKey | grep -v "f:AccessKey:" | awk '{print $2}' | base64 --decode)
 AWS_SECRET_ACCESS_KEY=$(oc get secrets -n rook-ceph rook-ceph-object-user-s3-object-store-odh-user -o yaml | grep SecretKey | grep -v "f:SecretKey:" | awk '{print $2}' | base64 --decode)
@@ -268,3 +272,7 @@ oc get secrets -n rook-ceph rook-ceph-object-user-s3-object-store-odh-user -o ya
     registry.redhat.io/rhel8/buildah
     registry.redhat.io/rhel8/skopeo:8.2
     gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.14.2
+
+## Workshop
+quay.io/willbenton/simple-model-s2i:cached-pipeline-s2i
+quay.io/willbenton/jh-ml-workflows-notebook:summit2020
