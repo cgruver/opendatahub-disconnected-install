@@ -9,23 +9,7 @@
 1. Dynamic storage provisioners for Block and S3 compatible Object storage
     See: https://github.com/cgruver/rook-ceph-disconnected-install for a disconnected install of Ceph that provides the needed storage capabilities
 
-### Set up local registry trust
-
-You need to establish trust between your OpenShift cluster and your image registry so that the ImageStreams will work.
-
-If you need to install a registry to hold your mirrored images, you can follow this guide: https://github.com/cgruver/okd4-upi-lab-setup/blob/master/docs/pages/Nexus_Config.md
-
-Modify the following assumptions for your environment:
-1. The self-signed cert for your registry is at `/etc/pki/ca-trust/source/anchors/nexus.crt`
-1. The URL for your registry is: nexus.your.domain.org:5000 __Note: replace the `:` with `..` below__
-
-```bash
-openssl s_client -showcerts -connect nexus.your.domain.org:5000 </dev/null 2>/dev/null|openssl x509 -outform PEM > ca.crt
-oc create configmap nexus-registry-config --from-file=nexus.your.domain.org..5000=ca.crt -n openshift-config
-oc patch image.config.openshift.io cluster --type=merge --patch '{"spec":{"additionalTrustedCA":{"name":"nexus-registry-config"}}}'
-```
-
-### Set up Open Data Hub
+## Set up Open Data Hub
 
 Clone this repository:
 
@@ -86,6 +70,22 @@ From your internet connected workstation or bastion host:
         docker push ${IMAGE_TAG}
     done
     ```
+
+### Set up local registry trust
+
+You need to establish trust between your OpenShift cluster and your image registry so that the ImageStreams will work.
+
+If you need to install a registry to hold your mirrored images, you can follow this guide: https://github.com/cgruver/okd4-upi-lab-setup/blob/master/docs/pages/Nexus_Config.md
+
+Modify the following assumptions for your environment:
+1. The self-signed cert for your registry is at `/etc/pki/ca-trust/source/anchors/nexus.crt`
+1. The URL for your registry is: nexus.your.domain.org:5000 __Note: replace the `:` with `..` below__
+
+```bash
+openssl s_client -showcerts -connect ${LOCAL_REGISTRY} </dev/null 2>/dev/null|openssl x509 -outform PEM > ca.crt
+oc create configmap nexus-registry-config --from-file=${LOCAL_REGISTRY//:/..}=ca.crt -n openshift-config
+oc patch image.config.openshift.io cluster --type=merge --patch '{"spec":{"additionalTrustedCA":{"name":"nexus-registry-config"}}}'
+```
 
 ### Install Open Data Hub:
 
