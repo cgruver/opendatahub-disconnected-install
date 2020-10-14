@@ -167,7 +167,14 @@ oc get route jupyterhub -n my-opendatahub -o jsonpath='{.spec.host}'
 
 ### Installing Serverless (Knative)
 
+```bash
+oc apply -f serverless-ns.yaml
+oc apply -f serverless-role.yaml
+oc apply -f serverless-crd.yaml
+oc apply -f serverless-operator-csv.yaml
+```
 
+### S3 Buckets (WIP)
 
 ```bash
 AWS_ACCESS_KEY_ID=$(oc get secrets -n rook-ceph rook-ceph-object-user-s3-object-store-odh-user -o yaml | grep AccessKey | grep -v "f:AccessKey:" | awk '{print $2}' | base64 --decode)
@@ -263,15 +270,17 @@ oc get secrets -n rook-ceph rook-ceph-object-user-s3-object-store-odh-user -o ya
     quay.io/openshift-pipeline/tektoncd-pipeline-imagedigestexporter:v0.16.3
     quay.io/openshift-pipeline/tektoncd-pipeline-pullrequest-init:v0.16.3
     quay.io/openshift-pipeline/tektoncd-pipeline-gcs-fetcher:v0.16.3
-    registry.access.redhat.com/ubi8/ubi-minimal:latest
     quay.io/openshift-pipeline/tektoncd-pipeline-webhook:v0.16.3
     quay.io/openshift-pipeline/tektoncd-triggers-webhook:v0.8.1
     quay.io/openshift-pipeline/tektoncd-triggers-eventlistenersink:v0.8.1
-    registry.redhat.io/ocp-tools-43-tech-preview/source-to-image-rhel8
-    registry.redhat.io/openshift-serverless-1/client-kn-rhel8:0.15.2
-    registry.redhat.io/rhel8/buildah
-    registry.redhat.io/rhel8/skopeo:8.2
+    quay.io/openshift-pipeline/tektoncd-triggers-controller:v0.8.1
+    quay.io/buildah/stable:v1.15.1
+    quay.io/skopeo/stable:v1.1.1
+    registry.access.redhat.com/ubi8/ubi-minimal:latest
     gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.14.2
+    gcr.io/knative-releases/knative.dev/client/cmd/kn:v0.15.2
+    # This one requires a Red Hat subscription.  It can be built from: https://github.com/openshift/source-to-image
+    registry.redhat.io/ocp-tools-43-tech-preview/source-to-image-rhel8
 
 ## Workshop
 quay.io/willbenton/simple-model-s2i:cached-pipeline-s2i

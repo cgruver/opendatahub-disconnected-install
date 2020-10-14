@@ -36,7 +36,7 @@ metadata:
     support: Red Hat
     olm.skipRange: ">=1.9.0 <1.10.0"
   name: serverless-operator.v1.10.0
-  namespace: openshift-operators
+  namespace: openshift-serverless
 spec:
   apiservicedefinitions: {}
   customresourcedefinitions:

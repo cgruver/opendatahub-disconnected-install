@@ -8,8 +8,13 @@ kind: Namespace
 metadata:
   name: knative-eventing
 ---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: openshift-serverless
+---
 apiVersion: operators.coreos.com/v1
 kind: OperatorGroup
 metadata:
   name: knative-operator
-  namespace: knative-serving
+  namespace: openshift-serverless
