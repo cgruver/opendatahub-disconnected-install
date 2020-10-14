@@ -41,13 +41,6 @@ From your internet connected workstation or bastion host:
         docker pull ${i}
         docker tag ${i} ${IMAGE_TAG}
     done
-
-    for i in $(cat knative-images)
-    do 
-        IMAGE_TAG=${LOCAL_REGISTRY}/$(echo $i | cut -d"/" -f2-)
-        docker pull ${i}
-        docker tag ${i} ${IMAGE_TAG}
-    done
     ```
 
 1. Log into your local image registry.  Since you are in a disconnected environment, you might have to change networks for this step.
@@ -60,12 +53,6 @@ From your internet connected workstation or bastion host:
 
     ```bash
     for i in $(cat odh-images)
-    do 
-        IMAGE_TAG=${LOCAL_REGISTRY}/$(echo $i | cut -d"/" -f2-)
-        docker push ${IMAGE_TAG}
-    done
-
-    for i in $(cat knative-images)
     do 
         IMAGE_TAG=${LOCAL_REGISTRY}/$(echo $i | cut -d"/" -f2-)
         docker push ${IMAGE_TAG}
@@ -160,15 +147,6 @@ Log into JupyterHub
 
 ```bash
 oc get route jupyterhub -n my-opendatahub -o jsonpath='{.spec.host}'
-```
-
-### Installing Serverless (Knative)
-
-```bash
-oc apply -f serverless-ns.yaml
-oc apply -f serverless-role.yaml
-oc apply -f serverless-crd.yaml
-oc apply -f serverless-operator-csv.yaml
 ```
 
 ### S3 Buckets (WIP)
