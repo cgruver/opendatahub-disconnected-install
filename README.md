@@ -33,7 +33,8 @@ From your internet connected workstation or bastion host:
     Replace the value for LOCAL_REGISTRY with the URL for your registry.
 
     ```bash
-    LOCAL_REGISTRY=nexus.your.domain.org:5000
+    export LOCAL_REGISTRY=nexus.your.domain.org:5000
+    
     for i in $(cat odh-images)
     do 
         IMAGE_TAG=${LOCAL_REGISTRY}/$(echo $i | cut -d"/" -f2-)
@@ -76,10 +77,6 @@ From your internet connected workstation or bastion host:
 You need to establish trust between your OpenShift cluster and your image registry so that the ImageStreams will work.
 
 If you need to install a registry to hold your mirrored images, you can follow this guide: https://github.com/cgruver/okd4-upi-lab-setup/blob/master/docs/pages/Nexus_Config.md
-
-Modify the following assumptions for your environment:
-1. The self-signed cert for your registry is at `/etc/pki/ca-trust/source/anchors/nexus.crt`
-1. The URL for your registry is: nexus.your.domain.org:5000 __Note: replace the `:` with `..` below__
 
 ```bash
 openssl s_client -showcerts -connect ${LOCAL_REGISTRY} </dev/null 2>/dev/null|openssl x509 -outform PEM > ca.crt

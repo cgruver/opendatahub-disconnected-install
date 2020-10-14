@@ -5,7 +5,6 @@ registry.svc.ci.openshift.org/openshift/knative-v0.16.0:knative-eventing-channel
 registry.svc.ci.openshift.org/openshift/knative-v0.16.1:kn-cli-artifacts
 registry.svc.ci.openshift.org/openshift/knative-v0.16.0:knative-serving-autoscaler
 registry.svc.ci.openshift.org/openshift/knative-v0.16.0:knative-eventing-channel-dispatcher
-docker.io/maistra/proxyv2-ubi8:1.1.0
 registry.svc.ci.openshift.org/openshift/knative-v0.16.0:knative-eventing-ping
 registry.svc.ci.openshift.org/openshift/knative-v0.16.0:knative-eventing-apiserver-receive-adapter
 registry.svc.ci.openshift.org/openshift/knative-v0.16.0:knative-eventing-broker-filter
@@ -30,3 +29,4 @@ registry.svc.ci.openshift.org/openshift/knative-v0.16.0:knative-serving-storage-
 registry.svc.ci.openshift.org/openshift/knative-v0.16.0:knative-serving-autoscaler-hpa
 registry.svc.ci.openshift.org/openshift/knative-v0.16.0:knative-eventing-broker-cleanup
 registry.svc.ci.openshift.org/openshift/knative-v0.16.0:knative-eventing-sugar-controller
+docker.io/maistra/proxyv2-ubi8:1.1.0
