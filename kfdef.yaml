@@ -45,5 +45,5 @@ spec:
       name: notebook-images
   repos:
     - name: manifests
-      uri: http://10.11.11.10/opendatahub/odh-manifests.tar.gz
+      uri: --MANIFEST_URL--
   version: v0.8.0
