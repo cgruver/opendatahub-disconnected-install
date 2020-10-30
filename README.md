@@ -261,3 +261,4 @@ oc get secrets -n rook-ceph rook-ceph-object-user-s3-object-store-odh-user -o ya
 
     quay.io/willbenton/simple-model-s2i:cached-pipeline-s2i
     quay.io/willbenton/jh-ml-workflows-notebook:summit2020
+    quay.io/willbenton/jh-ml-workflows-notebook:devconf-us-2019
